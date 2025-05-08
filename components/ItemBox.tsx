@@ -22,6 +22,7 @@ const ItemBox = (props: ItemBoxProps) => {
                     setIsOpen(prev => !prev)
                 }}
                 style={{
+                    marginTop: 10,
                     padding: 10,
                     backgroundColor: '#007AFF',
                     borderRadius: 5
