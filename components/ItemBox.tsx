@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 type AddOn = {
@@ -13,11 +14,12 @@ type ItemBoxProps = {
 };
 
 const ItemBox = (props: ItemBoxProps) => {
+    const [isOpen, setIsOpen] = useState(false);
     return (
         <View>
             <TouchableOpacity
                 onPress={() => {
-                    // Handle press action
+                    setIsOpen(prev => !prev)
                 }}
                 style={{
                     padding: 10,
