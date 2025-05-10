@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 type AddOn = {
     name: string;
@@ -15,6 +15,10 @@ type ItemBoxProps = {
 
 export default function ItemBox(props: ItemBoxProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const [name, setName] = useState(props.name);
+    const [price, setPrice] = useState(String(props.price));
+    const [addOns, setAddOns] = useState<AddOn[]>(props.addOns || []);
+
     return (
         <View style={{ marginBottom: 20 }}>
             <TouchableOpacity
@@ -26,14 +30,55 @@ export default function ItemBox(props: ItemBoxProps) {
                     borderRadius: 5,
                 }}
             >
-                <Text style={{ color: 'white' }}>Add Item</Text>
+                <Text style={{ color: 'white' }}>{isOpen ? 'Hide Item' : 'Edit Item'}</Text>
             </TouchableOpacity>
+
             {isOpen && (
                 <View style={{ marginTop: 10, padding: 10, backgroundColor: '#f0f0f0', borderRadius: 5 }}>
-                    <Text>Name: {props.name}</Text>
-                    <Text>Price: ${props.price.toFixed(2)}</Text>
-                    {props.addOns?.map((addOn, index) => (
-                        <Text key={index}>+ {addOn.name} - ${addOn.price.toFixed(2)}</Text>
+                    <Text>Name:</Text>
+                    <TextInput
+                        value={name}
+                        onChangeText={setName}
+                        placeholder="Item name"
+                        style={{ borderBottomWidth: 1, marginBottom: 10 }}
+                    />
+
+                    <Text>Price:</Text>
+                    <TextInput
+                        value={price}
+                        onChangeText={setPrice}
+                        placeholder="Item price"
+                        keyboardType="numeric"
+                        style={{ borderBottomWidth: 1, marginBottom: 10 }}
+                    />
+
+                    {addOns.map((addOn, index) => (
+                        <View key={index} style={{ marginBottom: 10 }}>
+                            <Text>Add-On {index + 1} Name:</Text>
+                            <TextInput
+                                value={addOn.name}
+                                onChangeText={(text) => {
+                                    const newAddOns = [...addOns];
+                                    newAddOns[index].name = text;
+                                    setAddOns(newAddOns);
+                                }}
+                                placeholder="Add-on name"
+                                style={{ borderBottomWidth: 1 }}
+                            />
+
+                            <Text>Add-On {index + 1} Price:</Text>
+                            <TextInput
+                                value={String(addOn.price)}
+                                onChangeText={(text) => {
+                                    const newAddOns = [...addOns];
+                                    newAddOns[index].price = parseFloat(text) || 0;
+                                    setAddOns(newAddOns);
+                                }}
+                                keyboardType="numeric"
+                                placeholder="Add-on price"
+                                style={{ borderBottomWidth: 1 }}
+                            />
+                        </View>
                     ))}
                 </View>
             )}
